@@ -1,6 +1,5 @@
 ICU Admin Panel
 =======================
-- Build Admin panel frontend interface using AdminBSB - Material Design Template ([Link](https://github.com/gurayyarar/AdminBSBMaterialDesign))
 - Backend using PhP and MySQL.
 
 Installation
