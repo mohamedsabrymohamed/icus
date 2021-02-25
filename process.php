@@ -36,56 +36,15 @@ if($_POST)
                             if($user_data['user_type'] == 1)
                             {
                                 //admin
-                                $redirect_path = 'admin/index.php';
+                                $redirect_path = 'dashboard.php';
                                 ?><script type="text/javascript">window.location = '<?php echo $redirect_path; ?>'; </script><?php
                             }elseif($user_data['user_type'] == 0){
-                                //promoter
+                                //doctor
                                 $redirect_path = 'dashboard.php';
                                 ?><script type="text/javascript">window.location = '<?php echo $redirect_path; ?>'; </script><?php
                             }elseif($user_data['user_type'] == 2){
-                                //call center
-                                //check if new day data is sent
-                                $call_center_data_table = new call_center_data_table();
-                                $check_current_day_data = $call_center_data_table->check_daily_data($user_id);
-                                if(!$check_current_day_data['id'] && empty($check_current_day_data['id']))
-                                {
-                                    //get daily number
-                                    $site_settings_table = new site_settings_table();
-                                    $site_settings_data  = $site_settings_table->retrieve_param_by_id(1);
-                                    //generate random number
-                                    $patients_table     = new patients_table();
-                                    $patients_data      = $patients_table->select_daily_call_center_data($site_settings_data['param_value']);
-                                    $notifications_table= new notifications_table();
-                                    $count_number       = 0;
-                                    foreach($patients_data as $single_patient)
-                                    {
-                                        $data                    = array();
-                                        $data['patient_id']      = $single_patient['id'];
-                                        $data['user_id']         = $user_id;
-                                        $data['created_date']    = DATE('Y-m-d H:i:s');
-                                        $add_new_data            = $call_center_data_table->add_new_data($data);
-                                        //update patient data status
-                                        $patient_data_status                    = array();
-                                        $patient_data_status['data_status']     = 1;
-                                        $where                                  = 'id = ' . $single_patient['id'];
-                                        $update_patient_data                    = $patients_table->update_patient_data($patient_data_status,$where);
-
-                                        $count_number++;
-                                    }
-                                    //create notification
-                                    $notifications_data    = array();
-                                    $notifications_data['notification_text'] = 'You have '.$count_number." new data.";
-                                    $notifications_data['created_by']        = get_login_user_id();
-                                    $notifications_data['user_id']           = get_login_user_id();
-                                    $add_notification                        = $notifications_table->add_new_notification($notifications_data);
-
-                                }
-
-                                $redirect_path = 'admin/call_center.php';
-                                ?><script type="text/javascript">window.location = '<?php echo $redirect_path; ?>'; </script><?php
-                            }elseif($user_data['user_type'] == 3){
-                                //guest
-                                $redirect_path = 'admin/guest_reports.php';
+                                //hospital
+                                $redirect_path = 'hospital.php';
                                 ?><script type="text/javascript">window.location = '<?php echo $redirect_path; ?>'; </script><?php
                             }
 
@@ -108,92 +67,23 @@ if($_POST)
                 $user_data['email']      = $_POST['email'];
                 $user_data['username']   = $_POST['username'];
                 $user_data['password']   = $_POST['password'];
-                $user_data['status']     = $_POST['status'];
-                $user_data['user_type']  = $_POST['user_type'];
-                $user_data['created_by']= get_login_user_id();
+                $user_data['status']     = 1;
+                $user_data['user_type']  = 0;
+                $user_data['city_id']  = $_POST['city_id'];
+                $user_data['hospital']  = $_POST['hospital'];
+                $user_data['speciality']  = $_POST['speciality'];
+                $user_data['cert_id']  = $_POST['cert_id'];
                 $user_table = new users_table();
                 $add_new_user = $user_table->add_new_user($user_data);
                 if($add_new_user)
                 {
-                    if($_POST['user_type'] == 0)
-                    {
-                        $user_id = $add_new_user;
-                        if($_POST['hospital'][0] == 0)
-                        {
-                            $hospitals_table = new hospitals_table();
-                            foreach($_POST['city'] as $single_city){
-                                $hospitals_data  = $hospitals_table->retrieve_hospitals_by_city_id($single_city);
-                                $user_access_table = new UserAccess_table();
-                                foreach($hospitals_data as $single_hospital)
-                                {
-                                    $user_access_data                = array();
-                                    $user_access_data['user_id']     = $user_id;
-                                    $user_access_data['city_id']     = $single_city;
-                                    $user_access_data['hospital_id'] = $single_hospital['id'];
-                                    $user_add_data                   = $user_access_table->add_new_user_access($user_access_data);
-                                }
-                            }
-
-
-                        }else{
-                            $user_access_table = new UserAccess_table();
-                            foreach($_POST['hospital'] as $single_hospital){
-                                $hospitale_table  = new hospitals_table();
-                                $hospital_data    = $hospitale_table->retrieve_hospital_by_id($single_hospital);
-                                $user_access_data                = array();
-                                $user_access_data['user_id']     = $user_id;
-                                $user_access_data['city_id']     = $hospital_data['city_id'];
-                                $user_access_data['hospital_id'] = $single_hospital;
-                                $user_add_data                   = $user_access_table->add_new_user_access($user_access_data);
-                            }
-
-                        }
-                        if($user_add_data)
-                        {
-                            $curr_user_data = $user_table->retrieve_user_data_by_user_id(get_login_user_id());
-                            //create notification
-                            $notifications_table   = new notifications_table();
-                            $all_users             = $user_table->retrieve_all_users_except_current(get_login_user_id());
-                            foreach ($all_users as $single_user)
-                            {
-                                $notifications_data    = array();
-                                $notifications_data['notification_text'] = 'User : '.$_POST['full_name'].' is added by :'.$curr_user_data['full_name'];
-                                $notifications_data['created_by']        = get_login_user_id();
-                                $notifications_data['user_id']           = $single_user['id'];
-                                $add_notification                        = $notifications_table->add_new_notification($notifications_data);
-                            }
-
-
-
-                            $redirect_path = 'admin/users.php';
-                            ?><script type="text/javascript">window.location = '<?php echo $redirect_path; ?>'; </script><?php
-                        }else{
-                            $_SESSION['add_new_user_error'] = "Error add new user access data. Please try again.";
-                            $redirect_path = 'admin/add_new_user.php';
-                            ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?error=Y"; ?>'; </script><?php
-                        }
-                    }else{
-                        $curr_user_data = $user_table->retrieve_user_data_by_user_id(get_login_user_id());
-                        //create notification
-                        $notifications_table   = new notifications_table();
-                        $all_users             = $user_table->retrieve_all_users_except_current(get_login_user_id());
-                        foreach ($all_users as $single_user)
-                        {
-                            $notifications_data    = array();
-                            $notifications_data['notification_text'] = 'Admin : '.$_POST['full_name'].' is added by :'.$curr_user_data['full_name'];
-                            $notifications_data['created_by']        = get_login_user_id();
-                            $notifications_data['user_id']           = $single_user['id'];
-                            $add_notification                        = $notifications_table->add_new_notification($notifications_data);
-                        }
-
-                        $redirect_path = 'admin/users.php';
-                        ?><script type="text/javascript">window.location = '<?php echo $redirect_path; ?>'; </script><?php
-
-                    }
+                    $_SESSION['add_new_user_success'] = "Account Created. You can now login.";
+                    $redirect_path = 'index.php';
+                    ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?success=Y"; ?>'; </script><?php
 
                 }else{
                     $_SESSION['add_new_user_error'] = "Error add new user. Please try again.";
-                    $redirect_path = 'admin/add_new_user.php';
+                    $redirect_path = 'register.php';
                     ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?error=Y"; ?>'; </script><?php
                 }
 

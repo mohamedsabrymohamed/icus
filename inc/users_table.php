@@ -76,7 +76,7 @@ class users_table
 
     public function retrieve_user_by_username($username)
     {
-        $query = "Select id,full_name,password,salt from ".$this->_table_name." where username ='".$username."'";
+        $query = "select id,full_name,password,salt from ".$this->_table_name." where username ='".$username."'";
         $result = $this->_dbh->query($query);
         $result_data = mysqli_fetch_assoc($result);
         if($result_data['id'] and !empty($result_data['id']))

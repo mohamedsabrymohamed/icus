@@ -26,8 +26,13 @@ require_once 'head.php';
                                         ?>
                                         <p style="text-align: center;color: red;margin-bottom: 10px;display: block;"><?php echo $_SESSION['login_error'];?></p>
                                     <?php }?>
+                                    <?php
+                                    if(isset($_GET['success']) && $_GET['success'] == 'Y'){
+                                        ?>
+                                        <p style="text-align: center;color: green;margin-bottom: 10px;display: block;"><?php echo $_SESSION['add_new_user_success'];?></p>
+                                    <?php }?>
                                     <p id="error"></p>
-                                    <div class="form-group"><input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Your Username" name="name="username""></div>
+                                    <div class="form-group"><input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Your Username" name="username""></div>
                                     <div class="form-group"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Password" name="password"></div>
                                     <div class="form-group">
                                         <div class="custom-control custom-checkbox small">
