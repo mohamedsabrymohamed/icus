@@ -1,4 +1,5 @@
 <?php
+require_once 'inc.php';
 require_once 'head.php';
 ?>
 
@@ -15,10 +16,18 @@ require_once 'head.php';
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h4 class="text-dark mb-4">Welcome Back!</h4>
+                                    <h4 class="text-dark mb-4">ICU System</h4>
                                 </div>
-                                <form class="user">
-                                    <div class="form-group"><input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." name="email"></div>
+                                <form class="user" action="process.php" method="post">
+                                    <input type="hidden" name="form_name" value="login_form">
+                                    <input type="hidden" name="geoloc" id="geoloc" value="">
+                                    <?php
+                                    if(isset($_GET['error']) && $_GET['error'] == 'Y'){
+                                        ?>
+                                        <p style="text-align: center;color: red;margin-bottom: 10px;display: block;"><?php echo $_SESSION['login_error'];?></p>
+                                    <?php }?>
+                                    <p id="error"></p>
+                                    <div class="form-group"><input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Your Username" name="name="username""></div>
                                     <div class="form-group"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Password" name="password"></div>
                                     <div class="form-group">
                                         <div class="custom-control custom-checkbox small">
@@ -40,3 +49,26 @@ require_once 'head.php';
 </body>
 
 <?php require_once 'footer.php'?>
+<script>
+    var x = document.getElementById("error");
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        document.getElementById("geoloc").value = position.coords.latitude +","+ position.coords.longitude;
+    }
+    window.onload = getLocation;
+
+    if (localStorage) {
+        localStorage.clear();
+    }
+</script>
+
+</body>
+
+</html>
