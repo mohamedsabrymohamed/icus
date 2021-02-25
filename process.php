@@ -90,6 +90,32 @@ if($_POST)
                 break;
             }
 
+            case 'add_hospital_form':
+            {
+                $hospital_data = array();
+                $hospital_data['name']       = $_POST['hospital_name'];
+                $hospital_data['location']   = $_POST['location'];
+                $hospital_data['city_id']    = $_POST['city_id'];
+                $hospital_data['type']       = $_POST['type'];
+                $hospital_data['country_id']     = 42;
+
+                $hospital_table   = new hospitals_table();
+                $add_new_hospital = $hospital_table->add_new_hospital($hospital_data);
+                if($add_new_hospital)
+                {
+                    $_SESSION['add_new_user_success'] = "Account Created. You can now login.";
+                    $redirect_path = 'index.php';
+                    ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?success=Y"; ?>'; </script><?php
+
+                }else{
+                    $_SESSION['add_new_hospital_error'] = "Error add new hospital. Please try again.";
+                    $redirect_path = 'register_hospital.php';
+                    ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?error=Y"; ?>'; </script><?php
+                }
+
+                break;
+            }
+
             case 'edit_user_form':
             {
                 $user_id  = $_POST['uid'];
