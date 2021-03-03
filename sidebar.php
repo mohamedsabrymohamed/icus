@@ -20,6 +20,8 @@ $user_type  = $user_data['user_type'];
                     <li class="nav-item"><a class="nav-link active" href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="icus.php"><i class="fas fa-table"></i><span>ICUs</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="add_icu.php"><i class="fas fa-user"></i><span>Add ICU</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="pending_patients.php"><i class="fas fa-table-tennis"></i><span>Pending Patients</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="all_patients.php"><i class="fas fa-table"></i><span>All Patients</span></a></li>
 
                 <?php }?>
             </ul>
