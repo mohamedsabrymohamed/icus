@@ -28,7 +28,7 @@ if($count_notifications[0]['count_notif'] > 0) {
                 </div>
             </li>
             <li class="nav-item dropdown no-arrow mx-1">
-                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter" style="color:<?php echo $number_color;?>;background-color: <?php echo $ring_color;?>;"><?php echo $count_notifications[0]['count_notif'];?></span><i class="fas fa-bell fa-fw"></i></a>
+                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="badge badge-danger badge-counter" style="font-size: 20px;color:<?php echo $number_color;?>;background-color: <?php echo $ring_color;?>;"><?php echo $count_notifications[0]['count_notif'];?></span><i class="fas fa-bell fa-fw" style="font-size: 30px;"></i></a>
                     <div class="dropdown-menu dropdown-menu-right dropdown-list dropdown-menu-right animated--grow-in">
                         <h6 class="dropdown-header">Notification center</h6>
                         <?php

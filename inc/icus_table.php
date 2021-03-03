@@ -20,6 +20,29 @@ class icus_table
         return $trans_data;
     }
 
+    public function retrieve_all_free_icus(){
+        $query = "SELECT * from ".$this->_table_name." where status=0 order by id ASC";
+        $result = $this->_dbh->query($query);
+        $trans_data = array();
+        while($row = mysqli_fetch_assoc($result))
+        {
+            $trans_data[] = $row;
+        }
+        return $trans_data;
+    }
+
+
+    public function retrieve_all_free_icus_by_hospital_id($hospital_id){
+        $query = "SELECT * from ".$this->_table_name." where status=0 and hospital_id = ".$hospital_id." order by id ASC";
+        $result = $this->_dbh->query($query);
+        $trans_data = array();
+        while($row = mysqli_fetch_assoc($result))
+        {
+            $trans_data[] = $row;
+        }
+        return $trans_data;
+    }
+
     public function retrieve_all_icus_by_hospital_id($hospital_id){
         $query = "SELECT * from ".$this->_table_name." where hospital_id = ".$hospital_id." order by id ASC";
         $result = $this->_dbh->query($query);

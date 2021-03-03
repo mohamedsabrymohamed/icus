@@ -31,6 +31,17 @@ class patients_table
         return $trans_data;
     }
 
+    public function retrieve_all_patients_by_hospital_id_pending($hospital_id){
+        $query = "SELECT * from ".$this->_table_name." where hospital_id = ".$hospital_id." and status = 0 order by id ASC";
+        $result = $this->_dbh->query($query);
+        $trans_data = array();
+        while($row = mysqli_fetch_assoc($result))
+        {
+            $trans_data[] = $row;
+        }
+        return $trans_data;
+    }
+
     public function retrieve_all_patients_by_user_id($user_id){
         $query = "SELECT * from ".$this->_table_name." where created_by = ".$user_id." order by id ASC";
         $result = $this->_dbh->query($query);
