@@ -210,6 +210,33 @@ if($_POST)
 
                 break;
             }
+
+            case 'add_new_icu_form':
+            {
+                //get hospital id
+                $hospital_table           = new hospitals_table();
+                $hospital_data            = $hospital_table->retrieve_hospital_by_id(get_login_user_id());
+                $icu_data                 = array();
+                $icu_data['name']         = $_POST['icu_name'];
+                $icu_data['status']       = $_POST['status'];
+                $icu_data['hospital_id']  = $hospital_data['id'];
+                $icus_table               = new icus_table();
+                $add_new_icu              = $icus_table->add_new_icu($icu_data);
+                if($add_new_icu)
+                {
+                        $_SESSION['add_new_icu_success'] = "ICU Created.";
+                        $redirect_path = 'icus.php';
+                        ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?success=Y"; ?>'; </script><?php
+
+                    }else{
+                        $_SESSION['add_new_icu_error'] = "Error add new icu. Please try again.";
+                        $redirect_path = 'add_icu.php';
+                        ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?error=Y"; ?>'; </script><?php
+                    }
+
+                break;
+            }
+
             case 'patient_data_form':
             {
                 $patient_table                      = new patients_table();

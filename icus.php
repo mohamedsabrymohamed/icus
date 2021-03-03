@@ -19,9 +19,15 @@ require_once 'table_head.php';
                                 <div class="card shadow mb-3">
                                     <div class="card-header py-3">
                                         <p class="text-primary m-0 font-weight-bold">ICU Data</p>
+                                        <?php
+                                        if (isset($_GET['success']) && $_GET['success'] == 'Y') {
+                                            ?>
+                                            <p style="text-align: center;color: limegreen;"><?php echo $_SESSION['add_new_icu_success']; ?></p>
+                                        <?php } ?>
+                                        <p id="error"></p>
                                     </div>
                                     <div style="float: left;margin-left: 85%;">
-                                        <a href="add_new_hospital.php" id="add-new-butt"class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add New ICU</a>
+                                        <a href="add_icu.php" id="add-new-butt"class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add New ICU</a>
                                     </div>
                                     <div class="card-body">
 
