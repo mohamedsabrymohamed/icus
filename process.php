@@ -44,7 +44,7 @@ if($_POST)
                                 ?><script type="text/javascript">window.location = '<?php echo $redirect_path; ?>'; </script><?php
                             }elseif($user_data['user_type'] == 2){
                                 //hospital
-                                $redirect_path = 'hospital.php';
+                                $redirect_path = 'dashboard.php';
                                 ?><script type="text/javascript">window.location = '<?php echo $redirect_path; ?>'; </script><?php
                             }
 
@@ -925,24 +925,27 @@ if($_POST)
 
 if($_GET) {
 
-    // change user status
+    // change icu status
 
-    $status_uid = @$_GET['status_uid'];
+    $status_uid = @$_GET['icu_status_uid'];
     if ($status_uid and !empty($status_uid)) {
-        $users_table = new users_table();
-        $user_data   = $users_table->retrieve_user_data_by_user_id($status_uid);
-        if ($user_data) {
-            $user_curr_status  = $user_data['status'];
-            if($user_curr_status == 1){
-                $user_status = 0;
+        $isues_table = new icus_table();
+        $icus_data   = $isues_table->retrieve_icu_by_id($status_uid);
+        if ($icus_data) {
+            $icu_current_status  = $icus_data['status'];
+            if($icu_current_status == 1){
+                $icu_status = 0;
             }else{
-                $user_status = 1;
+                $icu_status = 1;
             }
-            $users_table  = new users_table();
-            $cart_delete  = $users_table->change_status($status_uid,$user_status);
+            $icu_new_data = array();
+            $icu_new_data['status'] = $icu_status;
+            $where                  = 'id = ' . $status_uid;
+            $isues_table    = new icus_table();
+            $change_status  = $isues_table->update_icu_data($icu_new_data,$where);
         }
-        $_SESSION['status_change'] = "User Status Changed Successfully.";
-        $redirect_path = 'admin/users.php';
+        $_SESSION['status_change'] = "ICU Status Changed Successfully.";
+        $redirect_path = 'icus.php';
         ?>
         <script type="text/javascript">window.location = '<?php echo $redirect_path . '?user_status=Y'; ?>'; </script><?php
     }

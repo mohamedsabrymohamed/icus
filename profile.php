@@ -190,3 +190,7 @@ require_once 'head.php';
 
             </div>
 <?php require_once 'footer.php'?>
+
+    </body>
+
+</html>
