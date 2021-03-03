@@ -15,3 +15,4 @@ require_once 'users_table.php';
 require_once 'users_log_table.php';
 require_once 'hospitals_table.php';
 require_once 'icus_table.php';
+require_once 'patients_table.php';

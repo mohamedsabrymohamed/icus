@@ -237,6 +237,52 @@ if($_POST)
                 break;
             }
 
+            case 'add_new_patient_form':
+            {
+                //get hospital id
+                $hospital_table           = new hospitals_table();
+                $hospital_data            = $hospital_table->retrieve_hospital_by_id($_POST['hospital_id']);
+                $patient_data                 = array();
+                $patient_data['full_name']    = $_POST['full_name'];
+                $patient_data['age']          = $_POST['age'];
+                $patient_data['hospital_id']  = $hospital_data['id'];
+                $patient_data['comments']     = $_POST['comment'];
+                $patient_data['created_by']   = get_login_user_id();
+                $patient_data['created_date'] = date("Y-m-d H:i:s");
+                if (!empty($_FILES['fileToUpload'])) {
+                    $report = file_upload("fileToUpload");
+                    if ($report) {
+                        $patient_data['report'] = $report;
+                    }
+                }
+                $patients_table           = new patients_table();
+                $add_new_patient          = $patients_table->add_new_patient($patient_data);
+                if($add_new_patient)
+                {
+                    ///get doctor data
+                    $users_table = new users_table();
+                    $users_data  = $users_table->retrieve_user_data_by_user_id(get_login_user_id());
+                    //add notification to hospital
+                    $notifications_data    = array();
+                    $notifications_data['notification_text'] = 'Doctor : '.$users_data['full_name'].' is asking for free ICU.';
+                    $notifications_data['created_by']        = get_login_user_id();
+                    $notifications_data['user_id']           = $_POST['hospital_id'];
+                    $notifications_table                     = new notifications_table();
+                    $add_notification                        = $notifications_table->add_new_notification($notifications_data);
+
+                    $_SESSION['add_new_patient_success'] = "Patient Created.";
+                    $redirect_path = 'patients.php';
+                    ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?success=Y"; ?>'; </script><?php
+
+                }else{
+                    $_SESSION['add_new_patient_error'] = "Error add new icu. Please try again.";
+                    $redirect_path = 'add_new_patient.php';
+                    ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?error=Y"; ?>'; </script><?php
+                }
+
+                break;
+            }
+
             case 'patient_data_form':
             {
                 $patient_table                      = new patients_table();

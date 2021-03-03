@@ -174,6 +174,29 @@ class users_table
     }
 
 
+    public function retrieve_all_hospitals()
+    {
+        $query = "SELECT * from ".$this->_table_name." where user_type = 2 ";
+        $result = $this->_dbh->query($query);
+        $trans_data = array();
+        while($row = mysqli_fetch_assoc($result))
+        {
+            $trans_data[] = $row;
+        }
+        return $trans_data;
+    }
+
+    public function retrieve_all_doctors()
+    {
+        $query = "SELECT * from ".$this->_table_name." where user_type = 0 ";
+        $result = $this->_dbh->query($query);
+        $trans_data = array();
+        while($row = mysqli_fetch_assoc($result))
+        {
+            $trans_data[] = $row;
+        }
+        return $trans_data;
+    }
 
 }
 ?>

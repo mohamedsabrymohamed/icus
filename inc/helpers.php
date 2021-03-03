@@ -141,3 +141,30 @@ function getBrowser() {
 }
 
 
+/////////////////////////  file upload /////////////////////////////
+function file_upload($file)
+{
+    $fileName    = $_FILES[$file]["name"];
+    $fileSize    = $_FILES[$file]["size"] / 1024;
+    $fileType    = $_FILES[$file]["type"];
+    $fileTmpName = $_FILES[$file]["tmp_name"];
+
+
+        if ($fileSize <= 15120) {
+
+            //New file name
+            $random = rand(1111, 9999);
+            $newFileName = $random . $fileName;
+
+            //File upload path
+            $uploadPath = "uploads/" .  $newFileName;
+
+            //function for upload file
+            if (move_uploaded_file($fileTmpName, $uploadPath)) {
+                return $newFileName;
+            }
+        } else {
+            return("Maximum upload file size limit is 15 Mb");
+        }
+    return false;
+}
