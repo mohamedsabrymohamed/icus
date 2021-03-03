@@ -33,6 +33,19 @@ class hospitals_table
     }
 
 
+    public function retrieve_hospital_id_by_id($id)
+    {
+        $query = "SELECT * from ".$this->_table_name." where id ='".$id."'";
+        $result = $this->_dbh->query($query);
+        $result_data = mysqli_fetch_assoc($result);
+        if($result_data['id'] and !empty($result_data['id']))
+        {
+            return $result_data;
+        }
+        return false;
+    }
+
+
     public function add_new_hospital(array $data)
     {
         if($data)
