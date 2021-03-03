@@ -19,16 +19,8 @@ require_once 'table_head.php';
                                 <div class="card shadow mb-3">
                                     <div class="card-header py-3">
                                         <p class="text-primary m-0 font-weight-bold">Patients Data</p>
-                                        <?php
-                                        if (isset($_GET['success']) && $_GET['success'] == 'Y') {
-                                            ?>
-                                            <p style="text-align: center;color: limegreen;"><?php echo $_SESSION['add_new_patient_success']; ?></p>
-                                        <?php } ?>
-                                        <p id="error"></p>
                                     </div>
-                                    <div style="float: left;margin-left: 85%;">
-                                        <a href="add_new_patient.php" id="add-new-butt"class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add New Patient</a>
-                                    </div>
+
                                     <div class="card-body">
 
 
@@ -45,6 +37,7 @@ require_once 'table_head.php';
                                                     <table id="example" class="table table-striped table-bordered dt-responsive nowrap data-table" style="width:100%">
                                                         <thead>
                                                         <tr>
+                                                            <th>Doctor</th>
                                                             <th>Full Name</th>
                                                             <th>Age</th>
                                                             <th>Comment</th>
@@ -98,7 +91,7 @@ require_once 'table_head.php';
                     var table = $('#example').DataTable( {
                         "pagingType": "input",
                         "lengthChange": false,
-                        "ajax": 'tables_data/patient_data.php',
+                        "ajax": 'tables_data/all_patients_data.php',
                         "deferRender": true,
                         "processing": true,
                         dom: 'Bfrtip',
