@@ -21,15 +21,16 @@ require_once 'head.php';
                             <div class="col">
                                 <div class="card shadow mb-3">
                                     <div class="card-header py-3">
-                                        <p class="text-primary m-0 font-weight-bold">Doctor Data</p>
+                                        <p class="text-primary m-0 font-weight-bold"><?php echo ($user_data['user_type'] == 0) ? "Doctor " : "Hospital "; ?> Data</p>
                                     </div>
                                     <div class="card-body">
+                                        <?php if($user_data['user_type'] == 0) { ?>
                                         <form action="process.php" method="post">
                                             <input type="hidden" name="form_name" value="update_doctor_profile_form">
                                             <?php
                                             if (isset($_GET['error']) && $_GET['error'] == 'Y') {
                                                 ?>
-                                                <p style="text-align: center;color: red;"><?php echo $_SESSION['add_new_user_error']; ?></p>
+                                                <p style="text-align: center;color: red;"><?php echo $_SESSION['update_profile_error']; ?></p>
                                             <?php } ?>
                                             <p id="error"></p>
                                             <div class="form-row">
@@ -82,6 +83,10 @@ require_once 'head.php';
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <div class="col">
+                                                    <div class="form-group"><label for="phone"><strong>Phone</strong></label>
+                                                        <input class="form-control" type="text" placeholder="phone" name="phone" value="<?php echo $user_data['phone'];?>"></div>
+                                                </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="col">
@@ -93,6 +98,88 @@ require_once 'head.php';
 
                                             <div class="form-group"><button class="btn btn-primary btn-sm" type="submit">Update</button></div>
                                         </form>
+                                        <?php }elseif ($user_data['user_type'] == 2){
+                                            $hospital_table = new hospitals_table();
+                                            $hospital_data  = $hospital_table->retrieve_hospital_by_id(get_login_user_id());
+                                            ?>
+                                            <form action="process.php" method="post">
+                                                <input type="hidden" name="form_name" value="update_hospital_profile_form">
+                                                <?php
+                                                if (isset($_GET['error']) && $_GET['error'] == 'Y') {
+                                                    ?>
+                                                    <p style="text-align: center;color: red;"><?php echo $_SESSION['update_profile_error']; ?></p>
+                                                <?php } ?>
+                                                <p id="error"></p>
+                                                <div class="form-row">
+                                                    <div class="col">
+                                                        <div class="form-group"><label for="username"><strong>Username</strong></label>
+                                                            <input class="form-control" type="text" placeholder="usename" name="username" value="<?php echo $user_data['username'];?>"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="form-group"><label for="email"><strong>Email Address</strong></label>
+                                                            <input class="form-control" type="email" placeholder="user@example.com" name="email" value="<?php echo $user_data['email'];?>"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="col">
+                                                        <div class="form-group"><label for="first_name"><strong>Full Name</strong></label>
+                                                            <input class="form-control" type="text" placeholder="Full Name" name="full_name" value="<?php echo $user_data['full_name'];?>"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="form-group"><label for="phone"><strong>Phone</strong></label>
+                                                            <input class="form-control" type="text" placeholder="phone" name="phone" value="<?php echo $user_data['phone'];?>"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="col">
+                                                        <div class="form-group"><label for="address"><strong>Address</strong></label>
+                                                            <input class="form-control" type="text" placeholder="address" name="address" value="<?php echo $hospital_data['location'];?>"></div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="col">
+                                                        <div class="form-group"><label for="city_id"><strong>City</strong></label>
+                                                            <select class="form-control" name="city_id" id="city_id" required>
+                                                                <option selected disabled>Please Select City</option>
+                                                                <?php
+                                                                foreach ($cities_data as $single_city){
+                                                                    $selected  = "";
+                                                                    $user_city = $user_data['city_id'];
+                                                                    $city_id   = $single_city['id'];
+                                                                    if($user_city == $city_id)
+                                                                    {
+                                                                        $selected = "selected ='selected'";
+                                                                    }
+                                                                    ?>
+                                                                    <option value="<?php echo $single_city['id'];?>" <?php echo $selected; ?> ><?php echo $single_city['city_name'];?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-row">
+                                                    <div class="col">
+                                                        <div class="form-group"><label for="city_id"><strong>Hospital Type</strong></label>
+                                                            <select class="form-control" name="type_id" id="type_id" required>
+                                                                <option <?php if($hospital_data['type'] == 0 ) {echo "selected ='selected'";}?> value="0">Governmental</option>
+                                                                <option <?php if($hospital_data['type'] == 1 ) {echo "selected ='selected'";}?> value="1">Private</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="col">
+                                                        <div class="form-group"><label for="password"><strong>Password</strong></label>
+                                                            <input class="form-control" type="text" placeholder="Password" name="password"></div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group"><button class="btn btn-primary btn-sm" type="submit">Update</button></div>
+                                            </form>
+                                        <?php }?>
                                     </div>
                                 </div>
 

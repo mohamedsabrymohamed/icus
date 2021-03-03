@@ -101,7 +101,7 @@ if($_POST)
                 $user_data['password']   = $_POST['password'];
                 $user_data['phone']      = $_POST['phone'];
                 $user_data['status']     = 1;
-                $user_data['user_type']  = 0;
+                $user_data['user_type']  = 2;
                 $user_data['city_id']  = $_POST['city_id'];
                 $user_table = new users_table();
                 $add_new_user = $user_table->add_new_user($user_data);
@@ -141,6 +141,7 @@ if($_POST)
                 $user_data['full_name']  = $_POST['full_name'];
                 $user_data['email']      = $_POST['email'];
                 $user_data['username']   = $_POST['username'];
+                $user_data['phone']      = $_POST['phone'];
                 $user_data['status']     = 1;
                 $user_data['user_type']  = 0;
                 $user_data['city_id']  = $_POST['city_id'];
@@ -157,11 +158,52 @@ if($_POST)
                 }
                 if($edit_user)
                 {
-                    $redirect_path = 'profile.php';
+                    $redirect_path = 'dashboard.php';
                     ?><script type="text/javascript">window.location = '<?php echo $redirect_path; ?>'; </script><?php
 
                 }else{
-                    $_SESSION['add_new_user_error'] = "Error add new user access data. Please try again.";
+                    $_SESSION['update_profile_error'] = "Error add new user access data. Please try again.";
+                    $redirect_path = 'profile.php';
+                    ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?error=Y"; ?>'; </script><?php
+                }
+
+                break;
+            }
+
+            case 'update_hospital_profile_form':
+            {
+                $user_id  = get_login_user_id();
+                $user_data = array();
+                $where                   = 'id = ' . $user_id;
+                $user_data['full_name']  = $_POST['full_name'];
+                $user_data['email']      = $_POST['email'];
+                $user_data['username']   = $_POST['username'];
+                $user_data['phone']      = $_POST['phone'];
+                $user_data['status']     = 1;
+                $user_data['user_type']  = 2;
+                $user_data['city_id']  = $_POST['city_id'];
+                $user_table = new users_table();
+                if(isset($_POST['password']) && !empty($_POST['password']))
+                {
+                    $user_data['password']  = $_POST['password'];
+                    $edit_user = $user_table->update_user_password($user_data,$user_id);
+                }else{
+                    $edit_user = $user_table->update_user_data($user_data,$where);
+                }
+                if($edit_user)
+                {
+                    $hospital_table       = new hospitals_table();
+                    $update_hospital_data = array();
+                    $where_hospital       = 'hospital_id = ' . $user_id;
+                    $update_hospital_data['location'] = $_POST['address'];
+                    $update_hospital_data['type']     = $_POST['type_id'];
+                    $update_hospital                  = $hospital_table->update_hospital_data($update_hospital_data,$where_hospital);
+
+                    $redirect_path = 'dashboard.php';
+                    ?><script type="text/javascript">window.location = '<?php echo $redirect_path; ?>'; </script><?php
+
+                }else{
+                    $_SESSION['update_profile_error'] = "Error add new user access data. Please try again.";
                     $redirect_path = 'profile.php';
                     ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?error=Y"; ?>'; </script><?php
                 }

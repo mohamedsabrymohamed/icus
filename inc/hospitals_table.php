@@ -8,19 +8,9 @@ class hospitals_table
         $this->_dbh = new db_connection($this->_table_name);
     }
 
-    public function retrieve_hospitals_by_city_id($city_id){
-        $query = "SELECT id, hospital_name,hospital_class,hospital_type from ".$this->_table_name." where city_id = ".$city_id;
-        $result = $this->_dbh->query($query);
-        $trans_data = array();
-        while($row = mysqli_fetch_assoc($result))
-        {
-            $trans_data[] = $row;
-        }
-        return $trans_data;
-    }
 
     public function retrieve_all_hospitals(){
-        $query = "SELECT id, hospital_name,hospital_class,hospital_type,city_id,polyclinic from ".$this->_table_name." order by hospital_name ASC";
+        $query = "SELECT * from ".$this->_table_name." order by hospital_name ASC";
         $result = $this->_dbh->query($query);
         $trans_data = array();
         while($row = mysqli_fetch_assoc($result))
@@ -32,7 +22,7 @@ class hospitals_table
 
     public function retrieve_hospital_by_id($hospital_id)
     {
-        $query = "SELECT id, hospital_name,hospital_class,hospital_type,city_id from ".$this->_table_name." where id ='".$hospital_id."'";
+        $query = "SELECT * from ".$this->_table_name." where hospital_id ='".$hospital_id."'";
         $result = $this->_dbh->query($query);
         $result_data = mysqli_fetch_assoc($result);
         if($result_data['id'] and !empty($result_data['id']))
@@ -51,5 +41,10 @@ class hospitals_table
 
         }
         return false;
+    }
+
+    public function update_hospital_data(array $user_data,$condition)
+    {
+        return $this->_dbh->update($user_data, $condition);
     }
 }
