@@ -23,7 +23,7 @@ class users_table
 
     public function retrieve_user_data_by_user_id($user_id)
     {
-        $query = "SELECT id,full_name,status,session_id,email,user_type,username from ".$this->_table_name." where id ='".$user_id."'";
+        $query = "SELECT id,full_name,status,session_id,email,user_type,username,city_id,cert_id,hospital,speciality	 from ".$this->_table_name." where id ='".$user_id."'";
         $result = $this->_dbh->query($query);
         $result_data = mysqli_fetch_assoc($result);
         if($result_data['id'] and !empty($result_data['id']))

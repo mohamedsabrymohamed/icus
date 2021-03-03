@@ -116,16 +116,20 @@ if($_POST)
                 break;
             }
 
-            case 'edit_user_form':
+            case 'update_doctor_profile_form':
             {
-                $user_id  = $_POST['uid'];
+                $user_id  = get_login_user_id();
                 $user_data = array();
                 $where                   = 'id = ' . $user_id;
                 $user_data['full_name']  = $_POST['full_name'];
                 $user_data['email']      = $_POST['email'];
                 $user_data['username']   = $_POST['username'];
-                $user_data['status']     = $_POST['status'];
-                $user_data['user_type']  = $_POST['user_type'];
+                $user_data['status']     = 1;
+                $user_data['user_type']  = 0;
+                $user_data['city_id']  = $_POST['city_id'];
+                $user_data['hospital']  = $_POST['hospital_name'];
+                $user_data['speciality']  = $_POST['speciality'];
+                $user_data['cert_id']  = $_POST['cert_id'];
                 $user_table = new users_table();
                 if(isset($_POST['password']) && !empty($_POST['password']))
                 {
@@ -136,58 +140,12 @@ if($_POST)
                 }
                 if($edit_user)
                 {
-                    if($_POST['user_type'] == 0)
-                    {
-                        $user_access_table  = new UserAccess_table();
-                        $user_access_remove = $user_access_table->delete_data($user_id);
-                        if($_POST['hospital'][0] == 0)
-                        {
-                            $hospitals_table = new hospitals_table();
-                            foreach($_POST['city'] as $single_city){
-                                $hospitals_data  = $hospitals_table->retrieve_hospitals_by_city_id($single_city);
-                                $user_access_table = new UserAccess_table();
-                                foreach($hospitals_data as $single_hospital)
-                                {
-                                    $user_access_data                = array();
-                                    $user_access_data['user_id']     = $user_id;
-                                    $user_access_data['city_id']     = $single_city;
-                                    $user_access_data['hospital_id'] = $single_hospital['id'];
-                                    $user_add_data                   = $user_access_table->add_new_user_access($user_access_data);
-                                }
-                            }
-
-
-                        }else{
-                            $user_access_table = new UserAccess_table();
-                            foreach($_POST['hospital'] as $single_hospital){
-                                $hospitale_table  = new hospitals_table();
-                                $hospital_data    = $hospitale_table->retrieve_hospital_by_id($single_hospital);
-                                $user_access_data                = array();
-                                $user_access_data['user_id']     = $user_id;
-                                $user_access_data['city_id']     = $hospital_data['city_id'];
-                                $user_access_data['hospital_id'] = $single_hospital;
-                                $user_add_data                   = $user_access_table->add_new_user_access($user_access_data);
-                            }
-
-                        }
-                        if($user_add_data)
-                        {
-                            $redirect_path = 'admin/users.php';
-                            ?><script type="text/javascript">window.location = '<?php echo $redirect_path; ?>'; </script><?php
-                        }else{
-                            $_SESSION['add_new_user_error'] = "Error add new user access data. Please try again.";
-                            $redirect_path = 'admin/add_new_user.php';
-                            ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?error=Y"; ?>'; </script><?php
-                        }
-                    }else{
-                        $redirect_path = 'admin/users.php';
-                        ?><script type="text/javascript">window.location = '<?php echo $redirect_path; ?>'; </script><?php
-                    }
-
+                    $redirect_path = 'profile.php';
+                    ?><script type="text/javascript">window.location = '<?php echo $redirect_path; ?>'; </script><?php
 
                 }else{
-                    $_SESSION['add_new_user_error'] = "Error add new user. Please try again.";
-                    $redirect_path = 'admin/add_new_user.php';
+                    $_SESSION['add_new_user_error'] = "Error add new user access data. Please try again.";
+                    $redirect_path = 'profile.php';
                     ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?error=Y"; ?>'; </script><?php
                 }
 

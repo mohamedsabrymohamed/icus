@@ -69,8 +69,15 @@ require_once 'head.php';
                                                             <option selected disabled>Please Select City</option>
                                                             <?php
                                                             foreach ($cities_data as $single_city){
+                                                                $selected  = "";
+                                                                $user_city = $user_data['city_id'];
+                                                                $city_id   = $single_city['id'];
+                                                                if($user_city == $city_id)
+                                                                {
+                                                                    $selected = "selected ='selected'";
+                                                                }
                                                                 ?>
-                                                                <option value="<?php echo $single_city['id'];?>"><?php echo $single_city['city_name'];?></option>
+                                                                <option value="<?php echo $single_city['id'];?>" <?php echo $selected; ?> ><?php echo $single_city['city_name'];?></option>
                                                             <?php } ?>
                                                         </select>
                                                     </div>
