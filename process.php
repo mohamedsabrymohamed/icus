@@ -67,6 +67,7 @@ if($_POST)
                 $user_data['email']      = $_POST['email'];
                 $user_data['username']   = $_POST['username'];
                 $user_data['password']   = $_POST['password'];
+                $user_data['phone']      = $_POST['phone'];
                 $user_data['status']     = 1;
                 $user_data['user_type']  = 0;
                 $user_data['city_id']  = $_POST['city_id'];
@@ -92,26 +93,42 @@ if($_POST)
 
             case 'add_hospital_form':
             {
-                $hospital_data = array();
-                $hospital_data['name']       = $_POST['hospital_name'];
-                $hospital_data['location']   = $_POST['location'];
-                $hospital_data['city_id']    = $_POST['city_id'];
-                $hospital_data['type']       = $_POST['type'];
-                $hospital_data['country_id']     = 42;
 
-                $hospital_table   = new hospitals_table();
-                $add_new_hospital = $hospital_table->add_new_hospital($hospital_data);
-                if($add_new_hospital)
+                $user_data = array();
+                $user_data['full_name']  = $_POST['hospital_name'];
+                $user_data['email']      = $_POST['email'];
+                $user_data['username']   = $_POST['username'];
+                $user_data['password']   = $_POST['password'];
+                $user_data['phone']      = $_POST['phone'];
+                $user_data['status']     = 1;
+                $user_data['user_type']  = 0;
+                $user_data['city_id']  = $_POST['city_id'];
+                $user_table = new users_table();
+                $add_new_user = $user_table->add_new_user($user_data);
+                if($add_new_user)
                 {
-                    $_SESSION['add_new_user_success'] = "Account Created. You can now login.";
-                    $redirect_path = 'index.php';
-                    ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?success=Y"; ?>'; </script><?php
+                    $hospital_data = array();
+                    $hospital_data['hospital_id']= $add_new_user;
+                    $hospital_data['location']   = $_POST['location'];
+                    $hospital_data['type']       = $_POST['type'];
 
-                }else{
-                    $_SESSION['add_new_hospital_error'] = "Error add new hospital. Please try again.";
-                    $redirect_path = 'register_hospital.php';
-                    ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?error=Y"; ?>'; </script><?php
+                    $hospital_table   = new hospitals_table();
+                    $add_new_hospital = $hospital_table->add_new_hospital($hospital_data);
+                    if($add_new_hospital)
+                    {
+                        $_SESSION['add_new_user_success'] = "Account Created. You can now login.";
+                        $redirect_path = 'index.php';
+                        ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?success=Y"; ?>'; </script><?php
+
+                    }else{
+                        $_SESSION['add_new_hospital_error'] = "Error add new hospital. Please try again.";
+                        $redirect_path = 'register_hospital.php';
+                        ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?error=Y"; ?>'; </script><?php
+                    }
                 }
+
+
+
 
                 break;
             }

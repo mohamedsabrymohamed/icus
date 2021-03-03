@@ -25,9 +25,15 @@ require_once 'head.php';
                                 <p style="text-align: center;color: red;"><?php echo $_SESSION['add_new_hospital_error']; ?></p>
                             <?php } ?>
                             <p id="error"></p>
-                            <div class="form-group">
-                                <input class="form-control" type="text" id="exampleFirstName" placeholder="Hospital Name" name="hospital_name" required>
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Email Address" name="email" required></div>
+                                <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" id="username" aria-describedby="username" placeholder="Username" name="username" required></div>
                             </div>
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="Hospital Name" name="hospital_name" required></div>
+                                <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" id="phone" aria-describedby="phone" placeholder="phone" name="phone" required></div>
+                            </div>
+
 
                             <div class="form-group">
                                 <input class="form-control" type="text" id="location" aria-describedby="location" placeholder="Address" name="location" required>
@@ -49,6 +55,10 @@ require_once 'head.php';
                                     <option value="0">Governmental</option>
                                     <option value="1">Private</option>
                                 </select>
+                            </div>
+
+                            <div class="form-group">
+                                <input class="form-control form-control-user" type="password" id="examplePasswordInput" placeholder="Password" name="password" required>
                             </div>
 
                             <button class="btn btn-primary btn-block text-white btn-user" type="submit">Register Account</button>

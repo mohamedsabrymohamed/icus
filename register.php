@@ -50,9 +50,12 @@ require_once 'head.php';
                                 <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" id="speciality" placeholder="speciality" name="speciality" required></div>
                             </div>
 
-                            <div class="form-group">
-                                <input class="form-control form-control-user" type="text" id="cert_id" placeholder="Certification ID" name="cert_id" required>
+                            <div class="form-group row">
+                                <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" id="cert_id" placeholder="Certification ID" name="cert_id" required></div>
+                                <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" id="phone" placeholder="phone" name="phone" required></div>
                             </div>
+
+
 
                             <button class="btn btn-primary btn-block text-white btn-user" type="submit">Register Account</button>
                             <hr>
