@@ -18,7 +18,7 @@ $data = array();
 
 
                                 foreach ($icus_data as $single_icu) {
-                                    $status = $single_icu['status'] == 0 ? 'Occupied' : 'Free';
+                                    $status = $single_icu['status'] == 1 ? 'Occupied' : 'Free';
                                     $action_buttons = "
                                     <a href='edit_icu.php?icu_uid=".$single_icu['id']."' target='_self'>
                                     <button class='btn btn-info btn-sm'>Edit</button>
