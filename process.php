@@ -237,6 +237,33 @@ if($_POST)
                 break;
             }
 
+            case 'edit_icu_form':
+            {
+                //get hospital id
+                $hospital_table           = new hospitals_table();
+                $hospital_data            = $hospital_table->retrieve_hospital_by_id(get_login_user_id());
+                $icu_data                 = array();
+                $icu_data['name']         = $_POST['icu_name'];
+                $icu_data['status']       = $_POST['status'];
+                $icu_data['hospital_id']  = $hospital_data['id'];
+                $where                    = 'id = ' . $_POST['icu_id'];
+                $icus_table               = new icus_table();
+                $update_icu               = $icus_table->update_icu_data($icu_data,$where);
+                if($update_icu)
+                {
+                    $_SESSION['edit_icu_error'] = "ICU Updated.";
+                    $redirect_path = 'icus.php';
+                    ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?success=Y"; ?>'; </script><?php
+
+                }else{
+                    $_SESSION['edit_icu_error'] = "Error update icu. Please try again.";
+                    $redirect_path = 'edit.php';
+                    ?><script type="text/javascript">window.location = '<?php echo $redirect_path."?error=Y"; ?>'; </script><?php
+                }
+
+                break;
+            }
+
             case 'add_new_patient_form':
             {
                 //get hospital id
